@@ -1,16 +1,14 @@
 package com.akryvtsun.populus;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.http.HttpHeaders;
 import java.util.Arrays;
 
 public class App {
@@ -39,14 +37,19 @@ public class App {
     private static String getRequestToken() {
         final String uri = "https://getpocket.com/v3/oauth/request";
 
-        //       HttpHeaders headers = new HttpHeaders();
-//        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        MultiValueMap<String, String> headers = new HttpHeaders();
+        headers.add("Content-Type", "application/x-www-form-urlencoded");
+        headers.add("X-Accept", "application/x-www-form-urlencoded");
+        HttpEntity entity = new HttpEntity(null, headers);
 
-//        RestTemplate restTemplate = new RestTemplate();
-//        HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
-//        ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, entity, String.class);
-//        System.out.println(result);
-        return "";
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(uri)
+            // Add query parameter
+            .queryParam("consumer_key", "89358-746e75c43372415aa37c59bf")
+            .queryParam("redirect_uri", "https://natribu.org");
+
+       String result = new RestTemplate()
+            .postForObject(builder.toUriString(), entity, String.class);
+        return result.split("=")[1];
     }
 
     private static String convertToAccessToken(String consumerKey, String code) {
