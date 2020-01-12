@@ -1,0 +1,1 @@
+curl -d "consumer_key=89358-746e75c43372415aa37c59bf&redirect_uri=https://natribu.org" -H "Content-Type: application/x-www-form-urlencoded; charset=UTF-8" -H "X-Accept: application/x-www-form-urlencoded" -X POST https://getpocket.com/v3/oauth/request

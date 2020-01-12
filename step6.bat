@@ -1,0 +1,1 @@
+curl -d "consumer_key=89358-746e75c43372415aa37c59bf&access_token=9c1f1326-d4ff-e95e-6a2f-37f748&favorite=1&count=2" -H "Content-Type: application/x-www-form-urlencoded; charset=UTF-8" -H "X-Accept: application/x-www-form-urlencoded" -X POST https://getpocket.com/v3/get
