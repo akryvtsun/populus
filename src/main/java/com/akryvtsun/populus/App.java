@@ -8,18 +8,37 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.awt.*;
 import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 public class App {
     private static final String CONSUMER_KEY = "89358-746e75c43372415aa37c59bf";
-    private static final String REDIRECT_URL = "https://natribu.org/";
+    private static final String REDIRECT_URL = "http://127.0.0.1:7777"; // "https://natribu.org/";
 
     public static void main(String[] args) throws URISyntaxException, IOException, InterruptedException {
+        System.out.println(">>> Step 0...");
+        new Thread(() -> {
+            try {
+                ServerSocket ss = new ServerSocket(7777);
+                for (int i = 0; i < 2; i++) {
+                    Socket s = ss.accept();
+                    System.out.println("Server socket has received smth on " + s);
+                    s.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
+        Thread.sleep(2*1000);
+
         // Step 2: Obtain a request token
+        System.out.println(">>> Step 2...");
         String code = getRequestToken(CONSUMER_KEY, REDIRECT_URL);
 
         // Step 3: Redirect user to Pocket to continue authorization
+        System.out.println(">>> Step 3...");
         Desktop.getDesktop().browse(
             new URI(
                 String.format("https://getpocket.com/auth/authorize?request_token=%s&redirect_uri=%s",
@@ -30,9 +49,11 @@ public class App {
         Thread.sleep(2*1000);
 
         // Step 5: Convert a request token into a Pocket access token
+        System.out.println(">>> Step 4...");
         String accessToken = convertToAccessToken(CONSUMER_KEY, code);
 
         // Step 6: Make authenticated requests to Pocket
+        System.out.println(">>> Step 5...");
         Object result = get2FavoriteLinks(CONSUMER_KEY, accessToken);
         System.out.println(result);
     }
