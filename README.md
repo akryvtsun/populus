@@ -13,5 +13,5 @@ Command line application for batch link operations with Pocket service
 
 - https://getpocket.com/developer/
 - [My Pocket Applications](https://getpocket.com/developer/apps/)
-- [Pocket Authentication API Documentation](https://getpocket.com/developer/docs/authentication)
+- [Pocket Authentication API](https://getpocket.com/developer/docs/authentication)
 - https://getpocket.com/developer/docs/v3/retrieve
