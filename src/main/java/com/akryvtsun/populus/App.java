@@ -7,7 +7,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.awt.*;
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URI;
@@ -22,16 +22,27 @@ public class App {
         new Thread(() -> {
             try {
                 ServerSocket ss = new ServerSocket(7777);
-                for (int i = 0; i < 2; i++) {
-                    Socket s = ss.accept();
-                    System.out.println("Server socket has received smth on " + s);
-                    s.close();
+                Socket s = ss.accept();
+                System.out.println("Server socket has received smth on " + s);
+                PrintStream ps = new PrintStream(s.getOutputStream());
+
+                File file = new File(
+                    App.class.getClassLoader().getResource("index.html").getFile()
+                );
+                FileReader fr = new FileReader(file);
+                BufferedReader br = new BufferedReader(fr);
+                String line;
+                while ((line = br.readLine()) != null) {
+                    ps.println(line);
                 }
+                fr.close();
+                ps.close();
+                //                 s.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }).start();
-        Thread.sleep(2*1000);
+        Thread.sleep(2 * 1000);
 
         // Step 2: Obtain a request token
         System.out.println(">>> Step 2...");
@@ -46,7 +57,7 @@ public class App {
                 )
             )
         );
-        Thread.sleep(2*1000);
+        Thread.sleep(2 * 1000);
 
         // Step 5: Convert a request token into a Pocket access token
         System.out.println(">>> Step 4...");
@@ -71,7 +82,7 @@ public class App {
             .queryParam("consumer_key", consumerKey)
             .queryParam("redirect_uri", redirectUrl);
 
-       String result = new RestTemplate()
+        String result = new RestTemplate()
             .postForObject(builder.toUriString(), entity, String.class);
         System.out.println(result);
         return result.split("=")[1];
