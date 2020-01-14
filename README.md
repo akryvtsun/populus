@@ -1,18 +1,20 @@
+![Populis Leaf](leaf.png)
+
 # Populus
-Command line application for batch link operations with Pocket service
+[![EO principles respected here](https://www.elegantobjects.org/badge.svg)](https://www.elegantobjects.org)
 
-### OAuth2 authorization examples
+### What it is
+Populus is a command line application for batch link operations (review, delete etc.) in [Pocket](https://getpocket.com) service.
 
-- https://www.baeldung.com/spring-security-5-oauth2-login
-- https://docs.spring.io/spring-security-oauth2-boot/docs/current/reference/htmlsingle/#boot-features-security-custom-user-info-client
-- https://www.callicoder.com/spring-boot-security-oauth2-social-login-part-1/
-- https://www.callicoder.com/spring-boot-security-oauth2-social-login-part-2/
-- https://www.callicoder.com/spring-boot-security-oauth2-social-login-part-3/
+### Building
+Call Maven from the command line
+```
+mvn clean package
+```
 
 ### Resources
 
-- https://getpocket.com/developer/
-- [My Pocket Applications](https://getpocket.com/developer/apps/)
-- [Pocket Authentication API](https://getpocket.com/developer/docs/authentication)
-- https://getpocket.com/developer/docs/v3/retrieve
-- https://www.epochconverter.com/
+- [Pocket API TOC](https://getpocket.com/developer)
+  - [My Pocket Applications](https://getpocket.com/developer/apps/)
+  - [Pocket Authentication API](https://getpocket.com/developer/docs/authentication)
+- [Epoch & Unix Timestamp Conversion Tools](https://www.epochconverter.com)
