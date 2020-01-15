@@ -1,4 +1,4 @@
-![Populis Leaf](leaf.png)
+![Populis Leaf](logo.png)
 
 # Populus
 [![EO principles respected here](https://www.elegantobjects.org/badge.svg)](https://www.elegantobjects.org)
