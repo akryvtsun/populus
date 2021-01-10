@@ -5,8 +5,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -20,7 +18,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 public class App {
     private static final String CONSUMER_KEY = "89358-616af8fc8693e51acd35f0fb";
@@ -77,15 +74,17 @@ public class App {
         // Step 6: Make authenticated requests to Pocket
         System.out.println(">>> Step 5...");
         //Object result = get2FavoriteLinks(CONSUMER_KEY, accessToken);
+        int offset = 0;
         while (true) {
-            LinkHolder result = getAllLinks(CONSUMER_KEY, accessToken);
-            System.out.println("\tObtain " + result.list.size());
-            if (result.list.size() == 0)
+            LinkHolder result = getLinks(CONSUMER_KEY, accessToken, offset);
+            if (result.list.size() == 0) {
                 break;
-            String res = deleteLinks(CONSUMER_KEY, accessToken, result.list.values());
-            System.out.println("\t\tDeleted = " + res);
-        }
-        ;
+            }
+            offset += result.list.size();
+            System.out.println("\tObtain " + offset + " items");
+            String res = archiveLinks(CONSUMER_KEY, accessToken, result.list.values());
+            System.out.println("\t\tDeleted result = " + res);
+        };
         System.out.println("THE END!");
     }
 
@@ -147,7 +146,7 @@ public class App {
         return result;
     }
 
-    private static LinkHolder getAllLinks(String consumerKey, String accessToken) {
+    private static LinkHolder getLinks(String consumerKey, String accessToken, int offset) {
         final String uri = "https://getpocket.com/v3/get";
 
         MultiValueMap<String, String> headers = new HttpHeaders();
@@ -160,8 +159,8 @@ public class App {
             .queryParam("consumer_key", consumerKey)
             .queryParam("access_token", accessToken)
             .queryParam("favorite", "0")
-            .queryParam("count", "10")
-            .queryParam("offset", "0");
+            .queryParam("count", "100")
+            .queryParam("offset", offset);
 
         String result = new RestTemplate()
             .postForObject(builder.toUriString(), entity, String.class);
@@ -178,7 +177,7 @@ public class App {
         return object;
     }
 
-    private static String deleteLinks(String consumerKey, String accessToken, Collection<Link> links) {
+    private static String archiveLinks(String consumerKey, String accessToken, Collection<Link> links) {
         List<DeleteAction> actions = new ArrayList<>(links.size());
         for (Link link : links) {
             actions.add(new DeleteAction(link.item_id));
@@ -187,7 +186,6 @@ public class App {
         ActionsList list = new ActionsList(deleteActions);
 
         ObjectMapper mapper = new ObjectMapper();
-
         String jsonActions = null;
         try {
             jsonActions = mapper.writeValueAsString(list);
@@ -200,8 +198,8 @@ public class App {
         final String uri = "https://getpocket.com/v3/send";
 
         MultiValueMap<String, String> headers = new HttpHeaders();
-        headers.add("Content-Type", "application/x-www-form-urlencoded");
-        headers.add("X-Accept", "application/x-www-form-urlencoded");
+        headers.add("Content-Type", "application/json");
+    //    headers.add("X-Accept", "application/x-www-form-urlencoded");
         HttpEntity entity = new HttpEntity(jsonActions, headers);
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(uri)
