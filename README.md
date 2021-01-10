@@ -3,6 +3,8 @@
 # Populus
 [![EO principles respected here](https://www.elegantobjects.org/badge.svg)](https://www.elegantobjects.org)
 
+[![Hits-of-Code](https://hitsofcode.com/github/akryvtsun/populus)](https://hitsofcode.com/view/github/akryvtsun/populus)
+
 ### What it is
 Populus is a command line application for batch link operations (review, delete etc.) in [Pocket](https://getpocket.com) service.
 
