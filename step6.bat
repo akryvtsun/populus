@@ -1,1 +1,1 @@
-curl -d "consumer_key=89358-746e75c43372415aa37c59bf&access_token=9c1f1326-d4ff-e95e-6a2f-37f748&favorite=1&count=2" -H "Content-Type: application/x-www-form-urlencoded; charset=UTF-8" -H "X-Accept: application/x-www-form-urlencoded" -X POST https://getpocket.com/v3/get
+curl -d "consumer_key=89358-616af8fc8693e51acd35f0fb&access_token=fbb8527b-e6fd-01cc-4b90-f75de5&favorite=1&count=2" -H "Content-Type: application/x-www-form-urlencoded; charset=UTF-8" -H "X-Accept: application/x-www-form-urlencoded" -X POST https://getpocket.com/v3/get

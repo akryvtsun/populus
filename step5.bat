@@ -1,1 +1,1 @@
-curl -d "consumer_key=89358-746e75c43372415aa37c59bf&code=d9cc441f-7429-a7ef-65a6-d0edea" -H "Content-Type: application/x-www-form-urlencoded; charset=UTF-8" -H "X-Accept: application/x-www-form-urlencoded" -X POST https://getpocket.com/v3/oauth/authorize
+curl -d "consumer_key=89358-616af8fc8693e51acd35f0fb&code=44955f23-ac73-0298-acee-7c3adb" -H "Content-Type: application/x-www-form-urlencoded; charset=UTF-8" -H "X-Accept: application/x-www-form-urlencoded" -X POST https://getpocket.com/v3/oauth/authorize
