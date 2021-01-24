@@ -10,9 +10,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.awt.*;
-import java.io.*;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -24,31 +22,11 @@ public class App {
     private static final String REDIRECT_URL = "http://127.0.0.1:7777"; // "https://natribu.org/";
 
     public static void main(String[] args) throws URISyntaxException, IOException, InterruptedException {
-        System.out.println(">>> Step 0...");
-        new Thread(() -> {
-            try {
-                ServerSocket ss = new ServerSocket(7777);
-                Socket s = ss.accept();
-                System.out.println("Server socket has received smth on " + s);
-                PrintStream ps = new PrintStream(s.getOutputStream());
-
-                File file = new File(
-                    App.class.getClassLoader().getResource("index.html").getFile()
-                );
-                FileReader fr = new FileReader(file);
-                BufferedReader br = new BufferedReader(fr);
-                String line;
-                while ((line = br.readLine()) != null) {
-                    ps.println(line);
-                }
-                fr.close();
-                ps.close();
-                //                 s.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }).start();
-        Thread.sleep(2 * 1000);
+        System.out.println(">>> Step 0: launching local web server...");
+        Thread serverThread = new Thread(new LocalWebServer());
+        serverThread.start();
+        while (serverThread.getState() != Thread.State.RUNNABLE)
+            Thread.sleep(500);
 
         // Step 2: Obtain a request token
         System.out.println(">>> Step 2...");
@@ -82,7 +60,7 @@ public class App {
             }
             offset += result.list.size();
             System.out.println("\tObtain " + offset + " items");
-            String res = archiveLinks(CONSUMER_KEY, accessToken, result.list.values());
+            String res = deleteLinks(CONSUMER_KEY, accessToken, result.list.values());
             System.out.println("\t\tDeleted result = " + res);
         };
         System.out.println("THE END!");
@@ -177,7 +155,7 @@ public class App {
         return object;
     }
 
-    private static String archiveLinks(String consumerKey, String accessToken, Collection<Link> links) {
+    private static String deleteLinks(String consumerKey, String accessToken, Collection<Link> links) {
         List<DeleteAction> actions = new ArrayList<>(links.size());
         for (Link link : links) {
             actions.add(new DeleteAction(link.item_id));

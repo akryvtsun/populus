@@ -6,6 +6,6 @@ public class DeleteAction {
 
     public DeleteAction(String item_id) {
         this.item_id = item_id;
-        action = "archive"; // or "delete"
+        action = "delete"; // or "delete"
     }
 }
